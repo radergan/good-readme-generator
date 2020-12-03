@@ -13,13 +13,18 @@ const promptUser = () =>
     },
     {
       type: 'input',
-      name: 'name',
+      name: 'project',
       message: 'What is the name of your project?'
     },
     {
       type: 'input',
       name: 'description',
-      message: 'Provide a basic summary of the project and what solutions it provides'
+      message: 'Provide a basic summary of the project:'
+    },
+    { 
+      type: 'input',
+      name: 'credits',
+      message: 'Comments on any additional contributors (beyond yourself) to this project:;'
     },
     {
       type: 'input',
@@ -30,20 +35,44 @@ const promptUser = () =>
       type: 'input',
       name: 'usage',
       message: 'Provide any instructions and examples for use.'
-    }
+    },
     {
       type: 'list',
       message: 'Which license information will you include?',
-      name: 'contact',
-      choices: ['email', 'phone', 'telekinesis'],
+      name: 'license',
+      choices: ['MIT', 'GNU', 'APACHE'],
     },
   ]);
 
-const generateHTML = (answers) =>
-`${answers.location}.</p>
-`;
+let generateREADME = (answers) =>
+`
+# ${answers.project}
+
+## Table of Contents
+* [About](#about)
+* [Credits](#credits)
+* [Installation](#installation)
+* [Usage](#usage)
+* [License](#license)
+
+## About
+${answers.description}
+
+## Credits
+Project created by @${answers.username}. ${answers.credits}
+
+## Installation
+${answers.installation}
+
+## Usage 
+${answers.usage} 
+
+## License
+${answers.license}
+`
 
 promptUser()
-  .then((answers) => writeFileAsync('README.md', generateHTML(answers)))
+  .then((answers) => writeFileAsync('README.md', generateREADME(answers))
   .then(() => console.log('README.md generated successfully.'))
-  .catch((err) => console.error(err));
+  .catch((err) => console.error(err)))
+
